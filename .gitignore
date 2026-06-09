@@ -1,0 +1,8 @@
+.venv/
+data/raw/
+.env
+references/*.pdf
+__pycache__/
+*.pyc
+*.log
+*.tex

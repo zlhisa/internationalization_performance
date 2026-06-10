@@ -40,7 +40,7 @@ ROA = beta0 + beta1 * Leverage + controls + error
 ### Dependent variable (Y)
 | Construct | Data Item(s) | Formula |
 |-----------|-------------|---------|
-| ROA | ni, at | ni / at |
+| ROA | nicon, at | nicon / at |
 
 ### Independent variable (X)
 | Construct | Data Item(s) | Formula |

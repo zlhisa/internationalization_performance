@@ -51,4 +51,9 @@ ROA = beta0 + beta1 * Leverage + controls + error
 | Construct | Data Item(s) | Formula |
 |-----------|-------------|---------|
 | Firm Size | at | log(at) |
-| Cash Flow | ibc, d
+| Cash Flow | ibc, dp, at | (ibc + dp) / at |
+
+## Project Structure
+The project follows a reproducible research setup with separate 
+folders for raw data, processed data, code, output, references 
+and the final research note.

@@ -7,3 +7,8 @@ __pycache__/
 *.log
 *.tex
 data/processed/
+.ipynb_checkpoints/
+live_demo_pull.ipynb
+live_demo_clean.ipynb
+cols
+import

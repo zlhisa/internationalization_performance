@@ -12,3 +12,4 @@ live_demo_pull.ipynb
 live_demo_clean.ipynb
 cols
 import
+*.parquet

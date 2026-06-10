@@ -27,8 +27,8 @@ the tax benefits of debt (Modigliani & Miller, 1963).
 | Table | comp_global_daily.g_funda |
 | Fiscal years | 2015-2024 |
 | Downloaded | 2026-06-09 |
-| Raw rows | [aus pull_metadata.txt] |
-| Clean rows | [aus clean_log.txt] |
+| Raw rows | 338,483 |
+| Clean rows | 26,083 |
 
 ## Empirical Strategy
 The hypothesis will be tested using a simple linear regression 

@@ -83,19 +83,19 @@ print("\nLoading panel with variables...")
 df = pd.read_parquet(IN_PATH)
 print(f"  Shape: {df.shape[0]:,} rows | {df['gvkey'].nunique():,} firms | "
       f"years {df['fyear'].min()}-{df['fyear'].max()}")
-print(f"  R&D firms: {(df['rd_intensity']>0).sum():,} "
-      f"({(df['rd_intensity']>0).mean()*100:.1f}%)")
+print(f"  High leverage firms: {(df['leverage']>df['leverage'].median()).sum():,} "
+      f"({(df['leverage']>df['leverage'].median()).mean()*100:.1f}%)")
 
 # ── Variables ─────────────────────────────────────────────────────────────────
 # ADAPT: change these to your own variable names
 DV       = "roa"
-X_MAIN   = "rd_intensity"
-INTERACT = "rd_x_size"       # rd_intensity * ln_at
-CONTROLS = ["ln_at", "leverage", "capx_intensity", "cash_ratio"]
+X_MAIN   = "leverage"
+INTERACT = "lev_x_size"
+CONTROLS = ["ln_at", "capx_intensity", "cash_ratio"]
 
 # Build interaction if not already present
-if "rd_x_size" not in df.columns:
-    df["rd_x_size"] = df["rd_intensity"] * df["ln_at"]
+if "lev_x_size" not in df.columns:
+    df["lev_x_size"] = df["leverage"] * df["ln_at"]
 
 # ── Regression sample ─────────────────────────────────────────────────────────
 reg_vars = [DV, X_MAIN, INTERACT] + CONTROLS
@@ -207,13 +207,12 @@ print(f"\nSaved regression_results.csv")
 print("\n── H1 Diagnostic ────────────────────────────────────")
 b_x = res2.params[X_MAIN]
 p_x = res2.pvalues[X_MAIN]
-print(f"  β(rd_intensity) = {b_x:.4f}{stars(p_x)} (p={p_x:.3f})")
+print(f"  β(leverage) = {b_x:.4f}{stars(p_x)} (p={p_x:.3f})")
 if p_x < 0.10:
     if b_x < 0:
         print("  H1 SUPPORTED: negative effect as predicted")
-        print("  R&D expensing reduces current-period RoA under IFRS")
-        print("  Performance returns expected to accrue with a 2-5 year lag")
-        print("  Robustness check: lag rd_intensity by 2-3 years")
+        print("  Higher leverage increases financial risk and reduces RoA")
+        print("  Consistent with trade-off theory of capital structure")
     else:
         print("  H1 NOT SUPPORTED: effect is positive (unexpected direction)")
         print("  Check: winsorizing, sample selection, variable construction")
@@ -223,7 +222,7 @@ else:
 
 # ── H2 Diagnostic ─────────────────────────────────────────────────────────────
 print("\n── H2 Diagnostic ────────────────────────────────────")
-print(f"  β(rd_x_size) = {b_int:.4f}{stars(p_int)} (p={p_int:.3f})")
+print(f"  β(lev_x_size) = {b_int:.4f}{stars(p_int)} (p={p_int:.3f})")
 if p_int < 0.10:
     if b_int > 0:
         print("  H2 SUPPORTED: larger SMEs benefit more from R&D investment")

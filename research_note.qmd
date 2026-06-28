@@ -1,0 +1,122 @@
+---
+title: "Leverage and Financial Performance of European SMEs"
+author: "Lisa Zhang | ExInt II | WU Vienna | SS 2026 \\\nhttps://github.com/zlhisa/internationalization_performance"
+date: "June 2026"
+bibliography: references/library.bib
+csl: references/apa.csl
+format:
+  pdf:
+    documentclass: article
+    toc: false
+    number-sections: true
+    geometry: margin=2.5cm
+    fontsize: 11pt
+    linestretch: 1.3
+execute:
+  eval: true
+  echo: false
+  warning: false
+  message: false
+---
+```{python}
+#| label: setup
+import pandas as pd, numpy as np
+summary = pd.read_csv('output/tables/summary_statistics.csv', index_col=0)
+results = pd.read_csv('output/tables/regression_results.csv', index_col=0)
+results = results.fillna('')
+panel = pd.read_parquet('data/processed/panel_with_vars.parquet')
+n_obs = int(panel.shape[0])
+n_firms = int(panel['gvkey'].nunique())
+```
+# Introduction
+
+Financial leverage is a key factor in determining firm performance, yet its impact on small and medium-sized enterprises (SMEs) is still being debated. While the theoretical literature on capital structure has advanced considerably since Modigliani & Miller (1963), there is little empirical evidence for European SMEs. SMEs are faced with structurally different financing conditions than large firms, for instance, they rely more heavily on bank debt, have limited access to public capital markets, and face higher costs of financial distress (@bergerEconomicsSmallBusiness1998). This makes the relationship between leverage and performance particularly relevant for SMEs than for large corporations.
+
+Agency theory further explains how debt can influence firm outcomes. @jensenTheoryFirmManagerial1976 argue that leverage can reduce agency costs by constraining managerial discretion and limiting the inefficient use of free cash flow. In contrast, higher debt levels can increase agency conflicts between shareholders and creditors, especially through asset substitution and underinvestment problems. For SMEs, where ownership and management often overlap, these agency dynamics play out differently than in large publicly listed firms.
+
+Despite the theoretical importance of capital structure for SME performance, systematic empirical evidence across European firms remains limited. Most existing studies focus on large listed firms or single-country samples, leaving open the question of whether findings generalize to the broader European SME sector.
+
+This note addresses the following research question:
+
+> **Research question:** Does financial leverage negatively affect the financial performance of European SMEs, and does firm size moderate this relationship?
+
+# Theory and Hypotheses
+
+## Trade-Off Theory and Leverage
+
+The trade-off theory of capital structure (@modiglianiCorporateIncomeTaxes1963; @myersCapitalStructurePuzzle1984) argues that firms balance the tax benefits of debt against the costs of financial distress. At low levels of leverage, the tax shield on interest payments increases firm value. However, if the debt ratio is too high, the likelihood of financial distress increases significantly. This can lead to reduced operational flexibility, higher monitoring costs and reduces investment capacity. For SMEs, the optimal leverage ratio is expected to be lower than for large firms because SMEs generally face higher borrowing costs, less diversified income streams, and more limited access to external equity financing (@degryseImpactFirmIndustry2012).
+
+Empirical evidence broadly supports these theoretical predictions. In a large cross-country study, @frankCapitalStructureDecisions2009 confirmed that leverage is consistently negatively associated with profitability, suggesting that more profitable firms rely less on external debt. Likewise, @gonzalezLeverageCorporatePerformance2013 extend this to an international sample of 10,375 firms across 39 countries, finding that higher leverage significantly reduces performance during industry downturns, an effect that is particularly relevant for SMEs with limited liquidity reserves.
+
+> **H1:** Financial leverage is negatively associated with SME financial performance (ROA).
+> *(Test: expected sign of β(leverage) < 0)*
+
+## Firm Size as Moderator
+
+Firm size may shape the leverage-performance relationship through several mechanisms. Larger firms typically benefit from economies of scale in debt issuance, more diversified revenue streams that reduce cash flow volatility, and greater access to capital markets and stronger bargaining power when renegotiating debt terms in financial distress (@bergerEconomicsSmallBusiness1998). Similarly, @degryseImpactFirmIndustry2012 identify firm size as one of the strongest determinants of SME capital structure, with larger SMEs obtaining longer-maturity debt at lower borrowing costs.
+
+Although firm size is expected to shape the relationship between leverage and performance, there is no universal agreement on the theoretical direction of this effect. On one hand, larger SMEs may be better positioned to absorb the costs associated with higher leverage because of greater financial flexibility, they may also have larger absolute debt burdens, which increases their exposure to financial distress. Thus, the moderating function of company size remains an empirical question. Nevertheless, the existing evidence generally suggests that the negative impact of leverage is weaker for larger firms. For example, @PDFCapitalStructure2026 find that firm size positively moderates the leverage-performance relationship in their Jordanian panel.
+
+> **H2:** Firm size moderates the leverage-ROA relationship — larger SMEs are more resilient to the negative performance effects of debt.
+> *(Test: expected sign of β(leverage × ln_at) > 0)*
+
+# Data and Method
+
+## Sample
+
+The sample is drawn from Compustat Global via WRDS and covers the fiscal years 2015–2024. To ensure currency comparability across the Eurozone, we restrict the sample to EUR-reporting firms. Standard data quality filters were applied, requiring total assets above EUR 0.1m, positive sales, and positive stockholders' equity. To remove micro-firms whose log-transformed size produces extreme values, firms with total assets below EUR 1m were excluded. SMEs are defined following EU Commission guidelines (@SMEDefinitionInternal) as firms with fewer than 250 employees and either an annual turnover not exceeding EUR 50m, or a balance sheet total at or below EUR 43m. Since turnover data is less consistently available in Compustat Global, for this the balance sheet criterion is applied (at ≤ 43m) as a filter, along with the employee threshold (emp < 0.25, i.e. fewer than 250 employees). Firms with fewer than three consecutive observations are dropped to ensure sufficient variation within firms for fixed effects estimation.
+
+The final sample comprises `{python} f"{n_obs:,}"` firm-years from `{python} f"{n_firms:,}"` unique firms across 46 countries, covering fiscal years 2015–2024.
+
+## Variables
+
+| Variable | Field(s) | Formula | Role |
+|----------|----------|---------|------|
+| ROA | ib, at | ib / at | Dependent (Y) |
+| Leverage | dltt, at | dltt / at | Independent (X) |
+| Lev × Size | — | leverage × ln_at | H2 interaction |
+| Firm size | at | log(at) | Moderator + Control |
+| CAPX intensity | capx, at | capx / at | Control |
+| Cash ratio | che, at | che / at | Control |
+
+Return on assets (ROA), the dependent variable, is measured as income before extraordinary items divided by total assets. ROA is widely used as an accounting-based measure of firm performance in the SME literature (@luInternationalizationPerformanceSMEs2001). Financial leverage, the primary independent variable, is expressed as the ratio of long-term debt to total assets (dltt/at). Firm size, the moderating variable, is represented by the natural logarithm of total assets. Capital expenditure (CAPX) intensity is calculated as capital expenditures divided by total assets (capx/at), while the cash ratio is defined as cash and cash equivalents divided by total assets (che/at). Both variables are included as controls for firms' investment intensity and liquidity, respectively.
+
+To reduce the influence of extreme observations, all continuous variables are winsorized at the 1st and 99th percentiles (@PDFWinsorizationIdentifying).
+
+## Empirical Strategy
+
+The empirical analysis is based on the following regression equation:
+
+$$ROA_{it} = \beta_0 + \beta_1 Leverage_{it} + \beta_2 \ln(AT)_{it} + \beta_3 (Leverage \times \ln AT)_{it} + \gamma Controls_{it} + \alpha_i + \delta_t + \varepsilon_{it}$$
+
+Three regression specifications are estimated. First, model (1) uses a pooled ordinary least squares (OLS) regression to provide a baseline specification. Model (2) introduces a two-way fixed effects (TWFE) estimator, which includes firm fixed effects ($\alpha_i$) and year fixed effects ($\delta_t$) in order to control for unobserved heterogeneity and common time effects (@EconometricAnalysisCross). Lastly, model (3) extends the TWFE model by adding the interaction between leverage and firm size to test the moderating effect hypothesized in H2. Firm fixed effects absorb time-invariant firm characteristics such as management quality, industry positioning, and ownership structure, which could otherwise affect the relationship between leverage and performance. Standard errors are clustered at the firm level to account for serial correlation within firms (@petersenEstimatingStandardErrors2009). A Hausman-type comparison of fixed and random effects estimates confirms the preference for fixed effects (FE coefficient: −0.14 vs. RE coefficient: −0.18, difference: 0.04).
+
+# Results
+
+```{python}
+#| label: tbl-regression
+#| tbl-cap: "Regression results. * p<0.10, ** p<0.05, *** p<0.01. Standard errors clustered at firm level in Models (2)-(3)."
+results[['(1) OLS','(2) TWFE','(3) TWFE+H2']]
+```
+
+![Main relationship: Leverage vs. RoA (left) and median RoA by firm size for low vs. high leverage firms (right).](output/figures/main_relationship.png){width=90%}
+
+**H1 — Supported.** Financial leverage has a significant negative effect on ROA across all models. In the main TWFE specification (Model 2), the coefficient is β = −0.14 (p < 0.01), indicating that a ten percentage point increase in the debt-to-assets ratio is associated with a 1.4 percentage point decrease in ROA. This finding is consistent with the prediction of the trade-off theory that beyond an optimal level of leverage, the costs of financial distress dominate the tax benefits (@modiglianiCorporateIncomeTaxes1963; @myersCapitalStructurePuzzle1984), and aligns with prior empirical evidence from international samples (@gonzalezLeverageCorporatePerformance2013; @PDFCapitalStructure2026).
+
+**H2 — Not supported in the expected direction.** The interaction term (leverage × firm size) is marginally significant but negative (β = −0.03, p = 0.077) in Model 3. This suggests that larger SMEs do not buffer the negative leverage effect. In fact, the effect is slightly stronger for larger firms. This contradicts the moderation hypothesis and may reflect that larger SMEs in the sample also carry more absolute debt, which amplifies financial distress exposure rather than buffering it. This finding is similar to the ambiguity mentioned by @degryseImpactFirmIndustry2012 about the effects of size on the way SMEs organise their capital.
+
+**OLS vs. FE comparison.** The OLS estimate (β = −0.16) differs from the FE estimate (β = −0.14) by approximately 15%, indicating moderate omitted variable bias when firm heterogeneity is ignored. This relatively modest difference suggests that observable controls capture a substantial portion of the leverage-performance relationship, though firm fixed effects remain important for causal identification.
+
+# Discussion and Conclusion
+
+This study examines the effect of financial leverage on the performance of European SMEs using a large panel dataset comprising 8,011 firm-years from 1,220 firms across 46 countries. The results strongly supports H1, showing that leverage is negatively and significantly associated with ROA, consistent with the trade-off theory of capital structure (@modiglianiCorporateIncomeTaxes1963; @myersCapitalStructurePuzzle1984) and prior empirical evidence (@gonzalezLeverageCorporatePerformance2013; @frankCapitalStructureDecisions2009). The negative moderation in H2 is an unexpected finding, with larger SMEs appearing to be slightly more exposed to the negative performance effects of leverage rather than less so. This may reflect the institutional features of financing for European SMEs, where larger SMEs access more total debt but do not necessarily enjoy proportionally lower distress costs (@bergerEconomicsSmallBusiness1998; @degryseImpactFirmIndustry2012).
+
+**Research question answered:** The findings indicate that financial leverage negatively affects the financial performance of European SMEs. Firm size does not buffer this effect; if anything, larger SMEs face a slightly amplified negative relationship between leverage and profitability.
+
+**Limitations.** Several limitations should be acknowledged. First, the sample is restricted to EUR-reporting firms, which excludes Swiss firms and non-eurozone European countries, potentially limiting the generalizability of findings. Secondly, leverage is measured using long-term debt only (dltt/at), which may underestimate the total financial obligations of firms with significant short-term borrowing. Thirdly, the cross-country sample spans 46 countries with heterogeneous institutional environments. Country-level variation in creditor rights, bankruptcy laws, and bank lending practices may moderate the leverage-performance relationship in ways not captured by firm fixed effects.
+
+**Future research** could build on these findings by employing broader measures of financial leverage that include both short-term and long-term debt. In addition, examining country-level institutional factors, such as legal systems or financial market development, may help explain cross-country variation in the leverage-performance relationship. Further research could also investigate whether the effects of leverage differ across industries or phases of the business cycle. Finally, studies using longer panel datasets may provide deeper insights into the distinction between the short-run and long-run effects of leverage on SME performance.
+
+# References
+::: {#refs}
+:::

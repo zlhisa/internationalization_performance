@@ -15,5 +15,13 @@ tasks:
     deps: [descriptives]
     cmds:
       - python code/04_regression.py
+  render:
+    desc: "Render research_note.qmd to PDF via Quarto"
+    cmds:
+      - quarto render research_note.qmd
   all:
+    desc: "Full pipeline — analysis + PDF"
     deps: [regression]
+    cmds:
+      - quarto render research_note.qmd
+      

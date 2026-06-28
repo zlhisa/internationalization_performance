@@ -1,7 +1,7 @@
 ---
 title: "Leverage and Financial Performance of European SMEs"
 author: "Lisa Zhang | ExInt II | WU Vienna | SS 2026 \\\nhttps://github.com/zlhisa/internationalization_performance"
-date: "June 2026"
+date: "28 June 2026"
 bibliography: references/library.bib
 csl: references/apa.csl
 format:
@@ -111,12 +111,20 @@ results[['(1) OLS','(2) TWFE','(3) TWFE+H2']]
 
 This study examines the effect of financial leverage on the performance of European SMEs using a large panel dataset comprising 8,011 firm-years from 1,220 firms across 46 countries. The results strongly supports H1, showing that leverage is negatively and significantly associated with ROA, consistent with the trade-off theory of capital structure (@modiglianiCorporateIncomeTaxes1963; @myersCapitalStructurePuzzle1984) and prior empirical evidence (@gonzalezLeverageCorporatePerformance2013; @frankCapitalStructureDecisions2009). The negative moderation in H2 is an unexpected finding, with larger SMEs appearing to be slightly more exposed to the negative performance effects of leverage rather than less so. This may reflect the institutional features of financing for European SMEs, where larger SMEs access more total debt but do not necessarily enjoy proportionally lower distress costs (@bergerEconomicsSmallBusiness1998; @degryseImpactFirmIndustry2012).
 
-**Research question answered:** The findings indicate that financial leverage negatively affects the financial performance of European SMEs. Firm size does not buffer this effect; if anything, larger SMEs face a slightly amplified negative relationship between leverage and profitability.
+The findings indicate that financial leverage negatively affects the financial performance of European SMEs. Contrary to the proposed hypothesis, firm size does not mitigate this negative relationship. Instead, the evidence suggests that the negative relationship between leverage and profitability may be slightly stronger for larger SMEs.
 
-**Limitations.** Several limitations should be acknowledged. First, the sample is restricted to EUR-reporting firms, which excludes Swiss firms and non-eurozone European countries, potentially limiting the generalizability of findings. Secondly, leverage is measured using long-term debt only (dltt/at), which may underestimate the total financial obligations of firms with significant short-term borrowing. Thirdly, the cross-country sample spans 46 countries with heterogeneous institutional environments. Country-level variation in creditor rights, bankruptcy laws, and bank lending practices may moderate the leverage-performance relationship in ways not captured by firm fixed effects.
+Several limitations should be acknowledged. First, the sample is restricted to EUR-reporting firms, which excludes Swiss firms and non-eurozone European countries, potentially limiting the generalizability of findings. Secondly, leverage is measured using long-term debt only (dltt/at), which may underestimate the total financial obligations of firms with significant short-term borrowing. Thirdly, the cross-country sample spans 46 countries with heterogeneous institutional environments. Country-level variation in creditor rights, bankruptcy laws, and bank lending practices may moderate the leverage-performance relationship in ways not captured by firm fixed effects.
 
-**Future research** could build on these findings by employing broader measures of financial leverage that include both short-term and long-term debt. In addition, examining country-level institutional factors, such as legal systems or financial market development, may help explain cross-country variation in the leverage-performance relationship. Further research could also investigate whether the effects of leverage differ across industries or phases of the business cycle. Finally, studies using longer panel datasets may provide deeper insights into the distinction between the short-run and long-run effects of leverage on SME performance.
+Future research could build on these findings by employing broader measures of financial leverage that include both short-term and long-term debt. In addition, examining country-level institutional factors, such as legal systems or financial market development, may help explain cross-country variation in the leverage-performance relationship. Further research could also investigate whether the effects of leverage differ across industries or phases of the business cycle. Finally, studies using longer panel datasets may provide deeper insights into the distinction between the short-run and long-run effects of leverage on SME performance.
 
 # References
 ::: {#refs}
 :::
+
+---
+
+\small
+**AI Disclosure**
+
+This research note was developed with the assistance of AI (Claude) for language refinement, research support, research note design and structure, and code development. All analytical decisions, interpretations, and conclusions are the author's own.
+\normalsize
